@@ -1525,6 +1525,7 @@ const Workspace = ({ videoUrl, fileName, onClose }: { videoUrl: string, fileName
   // --- Keyboard Hotkeys ---
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.repeat) return;
       if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
 
       const isCtrlOrMeta = e.ctrlKey || e.metaKey;
@@ -3392,8 +3393,10 @@ const Workspace = ({ videoUrl, fileName, onClose }: { videoUrl: string, fileName
                                              <Edit2 className="w-4 h-4" />
                                          </button>
                                          <button 
-                                             onClick={() => {
-                                                if (confirm('Delete this tag?')) {
+                                             type="button"
+                                             onClick={(e) => {
+                                                e.stopPropagation();
+                                                if (window.confirm('Delete this tag?')) {
                                                     setTags(prev => prev.filter(t => t.id !== tag.id));
                                                 }
                                              }}
